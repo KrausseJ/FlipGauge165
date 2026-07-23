@@ -5,12 +5,44 @@ class LayoutConfig {
     function initialize() {
     }
 
-    function getCenterX(dcWidth as Number) as Number {
-        return dcWidth / 2;
+    function getScreenSize() as Number {
+        return 390;
     }
 
-    function getCenterY(dcHeight as Number) as Number {
-        return dcHeight / 2;
+    function getCenterX() as Number {
+        return 195;
+    }
+
+    function getTitleY() as Number {
+        return 42;
+    }
+
+    function getClockY() as Number {
+        return 92;
+    }
+
+    function getClockHeight() as Number {
+        return 112;
+    }
+
+    function getGaugeY() as Number {
+        return 222;
+    }
+
+    function getGaugeHeight() as Number {
+        return 58;
+    }
+
+    function getWidgetY() as Number {
+        return 295;
+    }
+
+    function getDateY() as Number {
+        return 350;
+    }
+
+    function getSideMargin() as Number {
+        return 42;
     }
 
 }
