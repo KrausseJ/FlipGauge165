@@ -1,0 +1,32 @@
+{
+  "target": "Garmin Forerunner 165",
+  "resolution": "390x390",
+  "master_scale": "4x",
+  "production_assets": [
+    "background_base.png",
+    "background_aod.png",
+    "clock_chassis.png",
+    "gauge_chassis.png",
+    "heart_icon.png",
+    "digit_0.png",
+    "digit_1.png",
+    "digit_2.png",
+    "digit_3.png",
+    "digit_4.png",
+    "digit_5.png",
+    "digit_6.png",
+    "digit_7.png",
+    "digit_8.png",
+    "digit_9.png"
+  ],
+  "renderer_features": [
+    "dynamic time and seconds",
+    "dynamic battery segments",
+    "battery warning colors",
+    "steps",
+    "heart rate",
+    "calories",
+    "date",
+    "AOD background hook via drawAod()"
+  ]
+}

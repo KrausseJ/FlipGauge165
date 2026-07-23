@@ -1,28 +1,27 @@
-# FlipGauge165 – Full UI Implementation
+# FlipGauge165 – Premium Art Pass 1
 
-This package changes the rendering strategy:
-
-- one static 390×390 background asset
-- one complete flip-clock chassis
-- one complete battery-instrument chassis
-- only digits, seconds, battery segments and live values are drawn dynamically
+This package upgrades the visual assets using 4× master artwork and high-quality downsampling to 390×390.
 
 ## Replace/copy
 
-1. Replace `source/Renderer.mc`.
-2. Copy `resources/assets/fullui/`.
-3. Copy `resources/drawables/fullui_assets.xml`.
+1. Replace `source/Renderer.mc`
+2. Replace `resources/drawables/fullui_assets.xml`
+3. Replace `resources/assets/fullui/`
+4. Copy `design/fullui_4x/` into the repository
 
-The previous `flip_assets.xml`, `resources/assets/flip/` and `resources/assets/gauge/`
-may remain temporarily, but are no longer used by this renderer.
+## Improvements
 
-## Dynamic values
-
-- time and seconds
+- more realistic ivory paper texture and vignette
+- brushed-metal clock chassis
+- refined flip panels and hinges
+- refined red seconds module
+- premium battery instrument
+- 4× master assets for future revisions
+- low-battery warning colors
 - battery percentage
-- steps
-- current heart rate
-- calories
-- date
+- dedicated AOD background asset
+- heart icon integrated into the statistics area
 
-The simulator can show zero for activity values until test data is configured.
+## Important
+
+The `drawAod()` method is included, but the watch-face view must call it during low-power rendering before AOD is fully active.

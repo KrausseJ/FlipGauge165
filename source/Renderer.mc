@@ -9,14 +9,18 @@ import Toybox.WatchUi;
 class Renderer {
 
     private var _background;
+    private var _backgroundAod;
     private var _clockChassis;
     private var _gaugeChassis;
+    private var _heartIcon;
     private var _digits;
 
     function initialize() {
         _background = WatchUi.loadResource(Rez.Drawables.FullUiBackground);
+        _backgroundAod = WatchUi.loadResource(Rez.Drawables.FullUiBackgroundAod);
         _clockChassis = WatchUi.loadResource(Rez.Drawables.ClockChassis);
         _gaugeChassis = WatchUi.loadResource(Rez.Drawables.GaugeChassis);
+        _heartIcon = WatchUi.loadResource(Rez.Drawables.HeartIcon);
 
         _digits = [
             WatchUi.loadResource(Rez.Drawables.FullUiDigit0),
@@ -39,6 +43,16 @@ class Renderer {
         dc.drawBitmap(0, 0, _background);
         drawClock(dc);
         drawGauge(dc);
+        drawStats(dc);
+        drawDate(dc);
+    }
+
+    function drawAod(dc as Dc) as Void {
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+
+        dc.drawBitmap(0, 0, _backgroundAod);
+        drawClock(dc);
         drawStats(dc);
         drawDate(dc);
     }
@@ -66,8 +80,7 @@ class Renderer {
     }
 
     private function drawDigit(dc as Dc, x as Number, y as Number, value as Number) as Void {
-        var index = value.toNumber();
-        dc.drawBitmap(x, y, _digits[index]);
+        dc.drawBitmap(x, y, _digits[value.toNumber()]);
     }
 
     private function drawGauge(dc as Dc) as Void {
@@ -76,11 +89,26 @@ class Renderer {
         var battery = System.getSystemStats().battery;
         var activeSegments = (battery * 22 / 100).toNumber();
 
-        dc.setColor(0x207334, Graphics.COLOR_TRANSPARENT);
+        var gaugeColor = 0x227634;
+        if (battery <= 15) {
+            gaugeColor = 0xB02B23;
+        } else if (battery <= 30) {
+            gaugeColor = 0xDF671C;
+        }
+
+        dc.setColor(gaugeColor, Graphics.COLOR_TRANSPARENT);
 
         for (var i = 0; i < activeSegments; i += 1) {
             dc.fillRectangle(88 + (i * 7), 221, 5, 10);
         }
+
+        dc.drawText(
+            195,
+            249,
+            Graphics.FONT_TINY,
+            battery.format("%d") + "%",
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
     }
 
     private function drawStats(dc as Dc) as Void {
@@ -99,7 +127,6 @@ class Renderer {
                 calories = activity.calories;
             }
         } catch (e) {
-            // Keep zero values when activity data is unavailable.
         }
 
         dc.setColor(0x1E1E1C, Graphics.COLOR_TRANSPARENT);
@@ -112,8 +139,10 @@ class Renderer {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
+        dc.drawBitmap(168, 299, _heartIcon);
+
         dc.drawText(
-            195,
+            212,
             313,
             Graphics.FONT_MEDIUM,
             heartRate.format("%d"),
@@ -144,7 +173,6 @@ class Renderer {
                 heartRate = sample.heartRate;
             }
         } catch (e) {
-            // Keep zero when no heart-rate sample is available.
         }
 
         return heartRate;
@@ -165,7 +193,7 @@ class Renderer {
         dc.setColor(0x1E1E1C, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             195,
-            357,
+            354,
             Graphics.FONT_SMALL,
             dateText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
