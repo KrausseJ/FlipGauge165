@@ -1,22 +1,25 @@
-# FlipGauge165 – Sprint 4 Layout Grid
+# FlipGauge165 – Master Implementation
 
-This package is a layout-only refinement for the Forerunner 165 (390 x 390 px).
+This package implements the approved `design/layout/layout_coordinates.json` for the 390 × 390 Forerunner 165 display.
 
-## Changes
-
-- narrower flip panels and condensed digits
-- tighter, centered clock group
-- seconds panel aligned to the main panels
-- title moved upward
-- compact battery instrument
-- dedicated three-column lower section: STEP / HEART / CALORIE
-- fixed date baseline and separator lines
-- no new functions or sensors
-
-## Installation
+## Replace/copy
 
 1. Replace `source/Renderer.mc`.
-2. Replace `resources/assets/flip/`.
-3. Replace `resources/assets/gauge/`.
-4. Keep or replace `resources/drawables/flip_assets.xml` with the included version.
-5. Build and run the simulator.
+2. Replace `resources/drawables/flip_assets.xml`.
+3. Replace the complete folders:
+   - `resources/assets/flip/`
+   - `resources/assets/gauge/`
+4. Build and run the simulator.
+
+## Fixed master coordinates
+
+- Title baseline: y = 34
+- Four flip panels: (54,62), (106,62), (183,62), (235,62), each 49 × 72
+- Separator: (160,74), 18 × 48
+- Seconds: (292,62), 44 × 72
+- Battery title: y = 165
+- Battery track: (72,214), 246 × 29
+- Widgets: y = 266–329
+- Date baseline: y = 352
+
+The clock and battery are dynamic. Step, heart, calorie and date values remain controlled placeholders for this layout-validation build.
