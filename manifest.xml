@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
-<iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
+<iq:manifest version="3" xmlns:iq="http://www.garmin.com/xml/connectiq">
     <iq:application
         id="a5c22241d3c1485a9c0ef14e3ee73b7a"
         type="watchface"
         name="@Strings.AppName"
         entry="FlipGaugeApp"
         minApiLevel="4.0.0">
-
         <iq:products>
             <iq:product id="fr165" />
         </iq:products>
-
         <iq:permissions />
         <iq:languages />
         <iq:barrels />

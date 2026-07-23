@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.0 - Sprint 1
+## 0.1.0 - 2026-07-23
 
-- Added clean Garmin Connect IQ project structure.
-- Added Forerunner 165 target.
-- Added minimal watch-face application and view.
-- Added starter screen with black background and `FlipGauge` text.
+- Added a complete minimal Connect IQ watch-face project structure.
+- Added the Forerunner 165 target.
+- Added application and watch-face entry classes.
+- Added the application-name resource.

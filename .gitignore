@@ -1,12 +1,8 @@
-# Connect IQ build output
 bin/
 gen/
-mir/
 *.prg
 *.iq
 *.debug.xml
-
-# IDE and operating system files
-.vscode/settings.json
+*.bak
 .DS_Store
 Thumbs.db
