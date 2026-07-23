@@ -1,8 +1,15 @@
+# Garmin build output
 bin/
 gen/
+
+# Generated Garmin files
 *.prg
-*.iq
 *.debug.xml
 *.bak
-.DS_Store
+
+# Operating system files
 Thumbs.db
+.DS_Store
+
+# Visual Studio Code
+.vscode/
