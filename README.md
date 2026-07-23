@@ -1,13 +1,25 @@
-# FlipGauge165 – Sprint 3A
+# FlipGauge165 – Sprint 3A.5
 
-## PNG assets
-Copy `resources/assets/flip/` into the Garmin project.
+Premium replacement assets for the flip clock.
 
-Included:
-- panel.png
-- separator.png
-- second_panel.png
-- digit_0.png through digit_9.png
+## Copy into the repository
 
-## SVG masters
-Editable source files are stored in `design/flip/`.
+Merge these folders into the existing project:
+
+- `resources/assets/flip/`
+- `resources/drawables/flip_assets.xml`
+- `design/flip_premium/`
+
+## Included production PNGs
+
+- `panel.png`
+- `panel_shadow.png`
+- `separator.png`
+- `second_panel.png`
+- `digit_0.png` through `digit_9.png`
+
+## Included masters
+
+The `design/flip_premium/` folder contains 4× PNG master files for later editing and resampling.
+
+These assets replace the first Sprint 3A versions.

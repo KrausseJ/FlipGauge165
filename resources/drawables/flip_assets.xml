@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <bitmap id="FlipPanel" filename="../assets/flip/panel.png" />
+    <bitmap id="FlipPanelShadow" filename="../assets/flip/panel_shadow.png" />
+    <bitmap id="FlipSeparator" filename="../assets/flip/separator.png" />
+    <bitmap id="SecondPanel" filename="../assets/flip/second_panel.png" />
+    <bitmap id="FlipDigit0" filename="../assets/flip/digit_0.png" />
+    <bitmap id="FlipDigit1" filename="../assets/flip/digit_1.png" />
+    <bitmap id="FlipDigit2" filename="../assets/flip/digit_2.png" />
+    <bitmap id="FlipDigit3" filename="../assets/flip/digit_3.png" />
+    <bitmap id="FlipDigit4" filename="../assets/flip/digit_4.png" />
+    <bitmap id="FlipDigit5" filename="../assets/flip/digit_5.png" />
+    <bitmap id="FlipDigit6" filename="../assets/flip/digit_6.png" />
+    <bitmap id="FlipDigit7" filename="../assets/flip/digit_7.png" />
+    <bitmap id="FlipDigit8" filename="../assets/flip/digit_8.png" />
+    <bitmap id="FlipDigit9" filename="../assets/flip/digit_9.png" />
+</resources>
