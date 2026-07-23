@@ -1,25 +1,17 @@
-# FlipGauge165 – Sprint 3A.5
+# FlipGauge165 – Sprint 3B
 
-Premium replacement assets for the flip clock.
+Sprint 3B replaces the drawn clock placeholder with bitmap-based flip modules.
 
-## Copy into the repository
+## Replace these files/folders
 
-Merge these folders into the existing project:
+1. Replace `source/Renderer.mc`.
+2. Replace the contents of `resources/assets/flip/` with the optimized Sprint 3B PNG files.
+3. Replace or verify `resources/drawables/flip_assets.xml`.
 
-- `resources/assets/flip/`
-- `resources/drawables/flip_assets.xml`
-- `design/flip_premium/`
+## What remains unchanged
 
-## Included production PNGs
+The battery gauge, step, heart and date remain placeholders. They will be replaced in later sprints.
 
-- `panel.png`
-- `panel_shadow.png`
-- `separator.png`
-- `second_panel.png`
-- `digit_0.png` through `digit_9.png`
+## Expected result
 
-## Included masters
-
-The `design/flip_premium/` folder contains 4× PNG master files for later editing and resampling.
-
-These assets replace the first Sprint 3A versions.
+The simulator should display four bitmap flip modules for HH:MM and the red seconds module.
