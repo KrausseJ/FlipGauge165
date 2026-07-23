@@ -1,25 +1,28 @@
-# FlipGauge165 – Master Implementation
+# FlipGauge165 – Full UI Implementation
 
-This package implements the approved `design/layout/layout_coordinates.json` for the 390 × 390 Forerunner 165 display.
+This package changes the rendering strategy:
+
+- one static 390×390 background asset
+- one complete flip-clock chassis
+- one complete battery-instrument chassis
+- only digits, seconds, battery segments and live values are drawn dynamically
 
 ## Replace/copy
 
 1. Replace `source/Renderer.mc`.
-2. Replace `resources/drawables/flip_assets.xml`.
-3. Replace the complete folders:
-   - `resources/assets/flip/`
-   - `resources/assets/gauge/`
-4. Build and run the simulator.
+2. Copy `resources/assets/fullui/`.
+3. Copy `resources/drawables/fullui_assets.xml`.
 
-## Fixed master coordinates
+The previous `flip_assets.xml`, `resources/assets/flip/` and `resources/assets/gauge/`
+may remain temporarily, but are no longer used by this renderer.
 
-- Title baseline: y = 34
-- Four flip panels: (54,62), (106,62), (183,62), (235,62), each 49 × 72
-- Separator: (160,74), 18 × 48
-- Seconds: (292,62), 44 × 72
-- Battery title: y = 165
-- Battery track: (72,214), 246 × 29
-- Widgets: y = 266–329
-- Date baseline: y = 352
+## Dynamic values
 
-The clock and battery are dynamic. Step, heart, calorie and date values remain controlled placeholders for this layout-validation build.
+- time and seconds
+- battery percentage
+- steps
+- current heart rate
+- calories
+- date
+
+The simulator can show zero for activity values until test data is configured.

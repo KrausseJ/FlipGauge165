@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <bitmap id="FullUiBackground" filename="../assets/fullui/background_base.png" />
+    <bitmap id="ClockChassis" filename="../assets/fullui/clock_chassis.png" />
+    <bitmap id="GaugeChassis" filename="../assets/fullui/gauge_chassis.png" />
+    <bitmap id="FullUiDigit0" filename="../assets/fullui/digit_0.png" />
+    <bitmap id="FullUiDigit1" filename="../assets/fullui/digit_1.png" />
+    <bitmap id="FullUiDigit2" filename="../assets/fullui/digit_2.png" />
+    <bitmap id="FullUiDigit3" filename="../assets/fullui/digit_3.png" />
+    <bitmap id="FullUiDigit4" filename="../assets/fullui/digit_4.png" />
+    <bitmap id="FullUiDigit5" filename="../assets/fullui/digit_5.png" />
+    <bitmap id="FullUiDigit6" filename="../assets/fullui/digit_6.png" />
+    <bitmap id="FullUiDigit7" filename="../assets/fullui/digit_7.png" />
+    <bitmap id="FullUiDigit8" filename="../assets/fullui/digit_8.png" />
+    <bitmap id="FullUiDigit9" filename="../assets/fullui/digit_9.png" />
+</resources>
