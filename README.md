@@ -1,17 +1,20 @@
-# FlipGauge165 – Sprint 3B
+# FlipGauge165 – Sprint 3C
 
-Sprint 3B replaces the drawn clock placeholder with bitmap-based flip modules.
+Enthalten:
 
-## Replace these files/folders
+- vergroesserte und ueberarbeitete Flip-Panels
+- schmalere Premium-Ziffern V2
+- optimierter Doppelpunkt
+- buendig ausgerichtetes Sekundenmodul
+- dynamische Batterieanzeige im Stil der freigegebenen Vorlage
+- aktualisierter Renderer
 
-1. Replace `source/Renderer.mc`.
-2. Replace the contents of `resources/assets/flip/` with the optimized Sprint 3B PNG files.
-3. Replace or verify `resources/drawables/flip_assets.xml`.
+## Installation
 
-## What remains unchanged
+1. `source/Renderer.mc` ersetzen.
+2. `resources/assets/flip/` ersetzen.
+3. `resources/assets/gauge/` neu kopieren.
+4. `resources/drawables/flip_assets.xml` ersetzen.
+5. Projekt kompilieren und im Simulator starten.
 
-The battery gauge, step, heart and date remain placeholders. They will be replaced in later sprints.
-
-## Expected result
-
-The simulator should display four bitmap flip modules for HH:MM and the red seconds module.
+Die Batterieanzeige verwendet `System.getSystemStats().battery` und skaliert die Segmentanzeige dynamisch.

@@ -14,4 +14,8 @@
     <bitmap id="FlipDigit7" filename="../assets/flip/digit_7.png" />
     <bitmap id="FlipDigit8" filename="../assets/flip/digit_8.png" />
     <bitmap id="FlipDigit9" filename="../assets/flip/digit_9.png" />
+    <bitmap id="GaugeFrame" filename="../assets/gauge/gauge_frame.png" />
+    <bitmap id="GaugeFill" filename="../assets/gauge/gauge_fill.png" />
+    <bitmap id="GaugeArrowLeft" filename="../assets/gauge/arrow_left.png" />
+    <bitmap id="GaugeArrowRight" filename="../assets/gauge/arrow_right.png" />
 </resources>
