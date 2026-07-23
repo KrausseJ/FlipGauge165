@@ -8,15 +8,12 @@ import Toybox.WatchUi;
 
 class Renderer {
 
-    private var _design as DesignSystem;
     private var _background;
     private var _clockChassis;
     private var _gaugeChassis;
     private var _digits;
 
     function initialize() {
-        _design = new DesignSystem();
-
         _background = WatchUi.loadResource(Rez.Drawables.FullUiBackground);
         _clockChassis = WatchUi.loadResource(Rez.Drawables.ClockChassis);
         _gaugeChassis = WatchUi.loadResource(Rez.Drawables.GaugeChassis);
@@ -53,10 +50,10 @@ class Renderer {
 
         dc.drawBitmap(41, 52, _clockChassis);
 
-        drawDigit(dc, 50, 64, hour / 10);
-        drawDigit(dc, 104, 64, hour % 10);
-        drawDigit(dc, 180, 64, minute / 10);
-        drawDigit(dc, 234, 64, minute % 10);
+        drawDigit(dc, 50, 64, (hour / 10).toNumber());
+        drawDigit(dc, 104, 64, (hour % 10).toNumber());
+        drawDigit(dc, 180, 64, (minute / 10).toNumber());
+        drawDigit(dc, 234, 64, (minute % 10).toNumber());
 
         dc.setColor(0xF6F3EA, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
@@ -69,7 +66,8 @@ class Renderer {
     }
 
     private function drawDigit(dc as Dc, x as Number, y as Number, value as Number) as Void {
-        dc.drawBitmap(x, y, _digits[value]);
+        var index = value.toNumber();
+        dc.drawBitmap(x, y, _digits[index]);
     }
 
     private function drawGauge(dc as Dc) as Void {
@@ -88,21 +86,20 @@ class Renderer {
     private function drawStats(dc as Dc) as Void {
         var steps = 0;
         var calories = 0;
-        var heartRate = 0;
+        var heartRate = getLatestHeartRate();
 
         try {
             var activity = ActivityMonitor.getInfo();
+
             if (activity.steps != null) {
                 steps = activity.steps;
             }
+
             if (activity.calories != null) {
                 calories = activity.calories;
             }
-            if (activity.currentHeartRate != null) {
-                heartRate = activity.currentHeartRate;
-            }
         } catch (e) {
-            // Keep zero values when the simulator/device has no data.
+            // Keep zero values when activity data is unavailable.
         }
 
         dc.setColor(0x1E1E1C, Graphics.COLOR_TRANSPARENT);
@@ -130,6 +127,27 @@ class Renderer {
             calories.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+    }
+
+    private function getLatestHeartRate() as Number {
+        var heartRate = 0;
+
+        try {
+            var iterator = ActivityMonitor.getHeartRateHistory(1, true);
+            var sample = iterator.next();
+
+            if (
+                sample != null &&
+                sample.heartRate != null &&
+                sample.heartRate != ActivityMonitor.INVALID_HR_SAMPLE
+            ) {
+                heartRate = sample.heartRate;
+            }
+        } catch (e) {
+            // Keep zero when no heart-rate sample is available.
+        }
+
+        return heartRate;
     }
 
     private function drawDate(dc as Dc) as Void {
