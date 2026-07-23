@@ -48,20 +48,22 @@ class Renderer {
     function draw(dc as Dc) as Void {
         var theme = _design.getTheme();
         var layout = _design.getLayout();
+
         dc.setColor(theme.getSecondaryTextColor(), theme.getCanvasColor());
         dc.clear();
+
         drawTitle(dc, layout, theme);
         drawBitmapClock(dc, layout, theme);
         drawBatteryGauge(dc, layout, theme);
-        drawBottomWidgetsPlaceholder(dc, layout, theme);
-        drawDatePlaceholder(dc, layout, theme);
+        drawBottomWidgets(dc, layout, theme);
+        drawDate(dc, layout, theme);
     }
 
     private function drawTitle(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
         dc.setColor(theme.getSecondaryTextColor(), Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(96, 64, 150, 64);
-        dc.drawLine(240, 64, 294, 64);
-        dc.drawText(layout.getCenterX(), 51, Graphics.FONT_SMALL, "TIME", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawLine(105, 44, 155, 44);
+        dc.drawLine(235, 44, 285, 44);
+        dc.drawText(195, 31, Graphics.FONT_SMALL, "TIME", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     private function drawBitmapClock(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
@@ -71,16 +73,17 @@ class Renderer {
         var minuteTens = clockTime.min / 10;
         var minuteOnes = clockTime.min % 10;
 
-        var panelWidth = 72;
-        var panelHeight = 92;
-        var digitWidth = 49;
-        var digitHeight = 82;
-        var separatorWidth = 18;
-        var secondsWidth = 50;
-        var gap = 1;
+        // Fixed 390 x 390 layout grid
+        var panelWidth = 62;
+        var panelHeight = 82;
+        var digitWidth = 40;
+        var digitHeight = 70;
+        var separatorWidth = 14;
+        var secondsWidth = 43;
+        var gap = 2;
         var totalWidth = (panelWidth * 4) + separatorWidth + secondsWidth + (gap * 5);
-        var startX = (layout.getScreenSize() - totalWidth) / 2;
-        var y = 82;
+        var startX = (390 - totalWidth) / 2;
+        var y = 58;
 
         var x1 = startX;
         var x2 = x1 + panelWidth + gap;
@@ -97,8 +100,12 @@ class Renderer {
         dc.drawBitmap(secondsX, y, _secondPanel);
 
         dc.setColor(theme.getPrimaryTextColor(), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(secondsX + (secondsWidth / 2), y + 36, Graphics.FONT_SMALL,
+        dc.drawText(secondsX + (secondsWidth / 2), y + 31, Graphics.FONT_XTINY,
             clockTime.sec.format("%02d"), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        dc.setColor(theme.getPrimaryTextColor(), Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x1 + panelWidth, 142, Graphics.FONT_TINY, "HOUR", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(x3 + panelWidth, 142, Graphics.FONT_TINY, "MINUTE", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     private function drawFlipDigit(dc as Dc, x as Number, y as Number, value as Number,
@@ -123,41 +130,53 @@ class Renderer {
     }
 
     private function drawBatteryGauge(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
-        var systemStats = System.getSystemStats();
-        var battery = systemStats.battery.toNumber();
+        var stats = System.getSystemStats();
+        var battery = stats.battery.toNumber();
         if (battery < 0) { battery = 0; }
         if (battery > 100) { battery = 100; }
 
-        var gaugeX = 36;
-        var gaugeY = 204;
-        dc.setColor(theme.getSecondaryTextColor(), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(layout.getCenterX(), 183, Graphics.FONT_XTINY, "ELECTRIC QUANTITY", Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawBitmap(gaugeX, gaugeY, _gaugeFrame);
-        dc.drawBitmap(8, gaugeY + 40, _gaugeArrowLeft);
-        dc.drawBitmap(346, gaugeY + 40, _gaugeArrowRight);
+        var gaugeX = 48;
+        var gaugeY = 179;
 
-        var fillX = gaugeX + 41;
-        var fillY = gaugeY + 48;
-        var fillWidth = 236 * battery / 100;
+        dc.setColor(theme.getSecondaryTextColor(), Graphics.COLOR_TRANSPARENT);
+        dc.drawText(195, 159, Graphics.FONT_XTINY, "ELECTRIC QUANTITY", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawBitmap(gaugeX, gaugeY, _gaugeFrame);
+        dc.drawBitmap(17, gaugeY + 30, _gaugeArrowLeft);
+        dc.drawBitmap(345, gaugeY + 30, _gaugeArrowRight);
+
+        // Compact gauge geometry after asset resampling
+        var fillX = gaugeX + 38;
+        var fillY = gaugeY + 40;
+        var fillWidth = 216 * battery / 100;
         if (fillWidth > 0) {
-            dc.setClip(fillX, fillY, fillWidth, 12);
+            dc.setClip(fillX, fillY, fillWidth, 10);
             dc.drawBitmap(fillX, fillY, _gaugeFill);
             dc.clearClip();
         }
     }
 
-    private function drawBottomWidgetsPlaceholder(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
-        var y = 300;
+    private function drawBottomWidgets(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
+        var labelY = 270;
+        var valueY = 292;
+
         dc.setColor(theme.getSecondaryTextColor(), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(110, y, Graphics.FONT_XTINY, "STEP", Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(280, y, Graphics.FONT_XTINY, "HEART", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(78, labelY, Graphics.FONT_XTINY, "STEP", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(195, labelY, Graphics.FONT_XTINY, "HEART", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(312, labelY, Graphics.FONT_XTINY, "CALORIE", Graphics.TEXT_JUSTIFY_CENTER);
+
+        dc.drawLine(132, 272, 132, 326);
+        dc.drawLine(258, 272, 258, 326);
+
         dc.setColor(theme.getAccentColor(), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(110, y + 22, Graphics.FONT_SMALL, "10342", Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(280, y + 22, Graphics.FONT_SMALL, "74", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(78, valueY, Graphics.FONT_SMALL, "10342", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(195, valueY, Graphics.FONT_SMALL, "74", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(312, valueY, Graphics.FONT_SMALL, "2356", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
-    private function drawDatePlaceholder(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
+    private function drawDate(dc as Dc, layout as LayoutConfig, theme as Theme) as Void {
         dc.setColor(theme.getSecondaryTextColor(), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(layout.getCenterX(), 356, Graphics.FONT_XTINY, "NO. 23 07 2026", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawLine(82, 351, 137, 351);
+        dc.drawLine(253, 351, 308, 351);
+        dc.drawText(195, 338, Graphics.FONT_XTINY, "NO. 23 07 2026", Graphics.TEXT_JUSTIFY_CENTER);
     }
 }
