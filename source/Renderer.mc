@@ -8,6 +8,7 @@ import Toybox.WatchUi;
 
 class Renderer {
 
+    private var _layout;
     private var _background;
     private var _backgroundAod;
     private var _clockChassis;
@@ -20,6 +21,8 @@ class Renderer {
     private var _secondDigits;
 
     function initialize() {
+        _layout = new LayoutConfig();
+
         _background = WatchUi.loadResource(Rez.Drawables.FullUiBackground);
         _backgroundAod = WatchUi.loadResource(Rez.Drawables.FullUiBackgroundAod);
         _clockChassis = WatchUi.loadResource(Rez.Drawables.ClockChassis);
@@ -57,10 +60,7 @@ class Renderer {
     }
 
     function draw(dc as Dc) as Void {
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
-        dc.clear();
-        dc.drawBitmap(0, 0, _background);
-
+        clearAndDrawBackground(dc, _background);
         drawTitle(dc);
         drawClock(dc, true);
         drawGauge(dc);
@@ -69,55 +69,61 @@ class Renderer {
     }
 
     function drawAod(dc as Dc) as Void {
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
-        dc.clear();
-        dc.drawBitmap(0, 0, _backgroundAod);
-
+        clearAndDrawBackground(dc, _backgroundAod);
         drawClock(dc, false);
         drawStats(dc, false);
         drawDate(dc, false);
     }
 
+    private function clearAndDrawBackground(dc as Dc, bitmap) as Void {
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        dc.drawBitmap(0, 0, bitmap);
+    }
+
     private function drawTitle(dc as Dc) as Void {
+        var y = _layout.titleY();
         dc.setColor(0x2A2722, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(84, 42, 139, 42);
-        dc.drawLine(251, 42, 306, 42);
-        dc.drawText(195, 42, Graphics.FONT_SMALL, "TIME",
+        dc.drawLine(83, y, 139, y);
+        dc.drawLine(251, y, 307, y);
+        dc.drawText(_layout.screenCenterX(), y, Graphics.FONT_SMALL, "TIME",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
-    private function drawClock(dc as Dc, showSeconds as Boolean) as Void {
+    private function drawClock(dc as Dc, showSeconds) as Void {
         var clockTime = System.getClockTime();
         var hour = clockTime.hour;
         var minute = clockTime.min;
 
-        // Centered inside the safe circular area.
-        dc.drawBitmap(30, 53, _clockChassis);
+        dc.drawBitmap(_layout.clockX(), _layout.clockY(), _clockChassis);
 
-        drawDigit(dc, 46, 65, (hour / 10).toNumber());
-        drawDigit(dc, 104, 65, (hour % 10).toNumber());
-        drawDigit(dc, 193, 65, (minute / 10).toNumber());
-        drawDigit(dc, 251, 65, (minute % 10).toNumber());
+        drawDigit(dc, _layout.hourDigit1X(), _layout.clockDigitY(), (hour / 10).toNumber());
+        drawDigit(dc, _layout.hourDigit2X(), _layout.clockDigitY(), (hour % 10).toNumber());
+        drawDigit(dc, _layout.minuteDigit1X(), _layout.clockDigitY(), (minute / 10).toNumber());
+        drawDigit(dc, _layout.minuteDigit2X(), _layout.clockDigitY(), (minute % 10).toNumber());
 
         if (showSeconds) {
             var sec = clockTime.sec;
-            dc.drawBitmap(317, 72, _secondDigits[(sec / 10).toNumber()]);
-            dc.drawBitmap(328, 72, _secondDigits[(sec % 10).toNumber()]);
+            dc.drawBitmap(_layout.secondDigit1X(), _layout.secondDigitY(),
+                _secondDigits[(sec / 10).toNumber()]);
+            dc.drawBitmap(_layout.secondDigit2X(), _layout.secondDigitY(),
+                _secondDigits[(sec % 10).toNumber()]);
         }
     }
 
-    private function drawDigit(dc as Dc, x as Number, y as Number, value as Number) as Void {
+    private function drawDigit(dc as Dc, x, y, value) as Void {
         dc.drawBitmap(x, y, _digits[value.toNumber()]);
     }
 
     private function drawGauge(dc as Dc) as Void {
+        var titleY = _layout.gaugeTitleY();
         dc.setColor(0x2A2722, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(66, 158, 104, 158);
-        dc.drawLine(286, 158, 324, 158);
-        dc.drawText(195, 158, Graphics.FONT_XTINY, "ELECTRIC QUANTITY",
+        dc.drawLine(58, titleY, 91, titleY);
+        dc.drawLine(299, titleY, 332, titleY);
+        dc.drawText(_layout.screenCenterX(), titleY, Graphics.FONT_XTINY, "ELECTRIC QUANTITY",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        dc.drawBitmap(37, 170, _gaugeChassis);
+        dc.drawBitmap(_layout.gaugeX(), _layout.gaugeY(), _gaugeChassis);
 
         var battery = System.getSystemStats().battery;
         var activeSegments = (battery * 25 / 100).toNumber();
@@ -130,15 +136,17 @@ class Renderer {
 
         dc.setColor(gaugeColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < activeSegments; i += 1) {
-            dc.fillRectangle(66 + (i * 8), 199, 5, 16);
+            dc.fillRectangle(_layout.gaugeSegmentX() + (i * 8),
+                _layout.gaugeSegmentY(), 5, 16);
         }
 
         dc.setColor(0x26863A, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(195, 231, Graphics.FONT_XTINY, battery.format("%d") + "%",
+        dc.drawText(_layout.screenCenterX(), _layout.gaugePercentY(), Graphics.FONT_XTINY,
+            battery.format("%d") + "%",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
-    private function drawStats(dc as Dc, showIcons as Boolean) as Void {
+    private function drawStats(dc as Dc, showIcons) as Void {
         var steps = 0;
         var calories = 0;
         var heartRate = getLatestHeartRate();
@@ -154,37 +162,40 @@ class Renderer {
         } catch (e) {
         }
 
+        var titleY = _layout.statsTitleY();
+        var valueY = _layout.statsValueY();
+
         dc.setColor(0x235487, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(78, 253, Graphics.FONT_XTINY, "STEP",
+        dc.drawText(76, titleY, Graphics.FONT_XTINY, "STEP",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.setColor(0xA42D24, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(195, 253, Graphics.FONT_XTINY, "HEART",
+        dc.drawText(195, titleY, Graphics.FONT_XTINY, "HEART",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.setColor(0xCC5D1B, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(308, 253, Graphics.FONT_XTINY, "CALORIE",
+        dc.drawText(310, titleY, Graphics.FONT_XTINY, "CALORIE",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.setColor(0x24211D, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(132, 250, 132, 307);
-        dc.drawLine(252, 250, 252, 307);
+        dc.drawLine(132, _layout.statsDividerTop(), 132, _layout.statsDividerBottom());
+        dc.drawLine(254, _layout.statsDividerTop(), 254, _layout.statsDividerBottom());
 
         if (showIcons) {
-            dc.drawBitmap(49, 273, _stepIcon);
-            dc.drawBitmap(160, 273, _heartIcon);
-            dc.drawBitmap(271, 273, _calorieIcon);
+            dc.drawBitmap(46, 282, _stepIcon);
+            dc.drawBitmap(157, 282, _heartIcon);
+            dc.drawBitmap(270, 282, _calorieIcon);
         }
 
-        dc.drawText(91, 285, Graphics.FONT_SMALL, steps.format("%d"),
+        dc.drawText(91, valueY, Graphics.FONT_SMALL, steps.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(208, 285, Graphics.FONT_SMALL, heartRate.format("%d"),
+        dc.drawText(210, valueY, Graphics.FONT_SMALL, heartRate.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(321, 285, Graphics.FONT_SMALL, calories.format("%d"),
+        dc.drawText(323, valueY, Graphics.FONT_SMALL, calories.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
-    private function getLatestHeartRate() as Number {
+    private function getLatestHeartRate() {
         var heartRate = 0;
         try {
             var iterator = ActivityMonitor.getHeartRateHistory(1, true);
@@ -198,20 +209,20 @@ class Renderer {
         return heartRate;
     }
 
-    private function drawDate(dc as Dc, showPlate as Boolean) as Void {
+    private function drawDate(dc as Dc, showPlate) as Void {
         var dateInfo = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var dateText = Lang.format("NO. $1$ $2$ $3$", [
+        var dateText = Lang.format("$1$  $2$  $3$", [
             dateInfo.day.format("%02d"),
             dateInfo.month.format("%02d"),
             dateInfo.year.format("%04d")
         ]);
 
         if (showPlate) {
-            dc.drawBitmap(93, 315, _datePlate);
+            dc.drawBitmap(_layout.datePlateX(), _layout.datePlateY(), _datePlate);
         }
 
         dc.setColor(showPlate ? 0x24211D : 0xD9D1C3, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(195, 332, Graphics.FONT_XTINY, dateText,
+        dc.drawText(_layout.screenCenterX(), _layout.dateTextY(), Graphics.FONT_XTINY, dateText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }
