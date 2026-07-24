@@ -80,8 +80,8 @@ class Renderer {
 
     private function drawTitle(dc as Dc) as Void {
         dc.setColor(0x2A2722, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(82, 42, 141, 42);
-        dc.drawLine(249, 42, 308, 42);
+        dc.drawLine(87, 42, 142, 42);
+        dc.drawLine(248, 42, 303, 42);
         dc.drawText(195, 42, Graphics.FONT_SMALL, "TIME",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
@@ -91,6 +91,7 @@ class Renderer {
         var hour = clockTime.hour;
         var minute = clockTime.min;
 
+        // The chassis uses almost the full safe width of the round display.
         dc.drawBitmap(32, 55, _clockChassis);
 
         drawDigit(dc, 48, 67, (hour / 10).toNumber());
@@ -100,8 +101,9 @@ class Renderer {
 
         if (showSeconds) {
             var sec = clockTime.sec;
-            dc.drawBitmap(319, 72, _secondDigits[(sec / 10).toNumber()]);
-            dc.drawBitmap(330, 72, _secondDigits[(sec % 10).toNumber()]);
+            // Narrow sprites now fit side by side inside the red seconds window.
+            dc.drawBitmap(321, 74, _secondDigits[(sec / 10).toNumber()]);
+            dc.drawBitmap(332, 74, _secondDigits[(sec % 10).toNumber()]);
         }
     }
 
@@ -111,12 +113,12 @@ class Renderer {
 
     private function drawGauge(dc as Dc) as Void {
         dc.setColor(0x2A2722, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(63, 165, 111, 165);
-        dc.drawLine(279, 165, 327, 165);
-        dc.drawText(195, 165, Graphics.FONT_TINY, "ELECTRIC-QUANTITY",
+        dc.drawLine(67, 160, 108, 160);
+        dc.drawLine(282, 160, 323, 160);
+        dc.drawText(195, 160, Graphics.FONT_XTINY, "ELECTRIC QUANTITY",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        dc.drawBitmap(37, 178, _gaugeChassis);
+        dc.drawBitmap(37, 172, _gaugeChassis);
 
         var battery = System.getSystemStats().battery;
         var activeSegments = (battery * 25 / 100).toNumber();
@@ -129,10 +131,11 @@ class Renderer {
 
         dc.setColor(gaugeColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < activeSegments; i += 1) {
-            dc.fillRectangle(66 + (i * 8), 207, 5, 18);
+            dc.fillRectangle(66 + (i * 8), 201, 5, 16);
         }
 
-        dc.drawText(195, 244, Graphics.FONT_TINY, battery.format("%d") + "%",
+        dc.setColor(0x26863A, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(195, 235, Graphics.FONT_XTINY, battery.format("%d") + "%",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
@@ -153,32 +156,32 @@ class Renderer {
         }
 
         dc.setColor(0x235487, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(79, 272, Graphics.FONT_TINY, "STEP",
+        dc.drawText(78, 258, Graphics.FONT_XTINY, "STEP",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.setColor(0xA42D24, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(195, 272, Graphics.FONT_TINY, "HEART",
+        dc.drawText(195, 258, Graphics.FONT_XTINY, "HEART",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.setColor(0xCC5D1B, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(307, 272, Graphics.FONT_TINY, "CALORIE",
+        dc.drawText(308, 258, Graphics.FONT_XTINY, "CALORIE",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
         dc.setColor(0x24211D, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(132, 265, 132, 326);
-        dc.drawLine(252, 265, 252, 326);
+        dc.drawLine(132, 253, 132, 315);
+        dc.drawLine(252, 253, 252, 315);
 
         if (showIcons) {
-            dc.drawBitmap(39, 289, _stepIcon);
-            dc.drawBitmap(145, 289, _heartIcon);
-            dc.drawBitmap(260, 289, _calorieIcon);
+            dc.drawBitmap(49, 279, _stepIcon);
+            dc.drawBitmap(160, 279, _heartIcon);
+            dc.drawBitmap(271, 279, _calorieIcon);
         }
 
-        dc.drawText(90, 306, Graphics.FONT_MEDIUM, steps.format("%d"),
+        dc.drawText(91, 291, Graphics.FONT_SMALL, steps.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(210, 306, Graphics.FONT_MEDIUM, heartRate.format("%d"),
+        dc.drawText(208, 291, Graphics.FONT_SMALL, heartRate.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(323, 306, Graphics.FONT_MEDIUM, calories.format("%d"),
+        dc.drawText(321, 291, Graphics.FONT_SMALL, calories.format("%d"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
@@ -205,11 +208,11 @@ class Renderer {
         ]);
 
         if (showPlate) {
-            dc.drawBitmap(93, 340, _datePlate);
+            dc.drawBitmap(93, 324, _datePlate);
         }
 
         dc.setColor(showPlate ? 0x24211D : 0xD9D1C3, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(195, 356, Graphics.FONT_TINY, dateText,
+        dc.drawText(195, 341, Graphics.FONT_XTINY, dateText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }
