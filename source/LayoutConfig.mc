@@ -3,38 +3,48 @@ class LayoutConfig {
     function initialize() {
     }
 
-    function screenCenterX() { return 195; }
+    function centerX() { return 195; }
 
-    // Fixed 390 x 390 design raster. These values deliberately do not
-    // inherit positions from the earlier prototype renderer.
-    function titleY() { return 37; }
+    // Sprint 11: visibly revised 390 x 390 raster.
+    function titleY() { return 30; }
 
-    function clockX() { return 32; }
-    function clockY() { return 55; }
+    function clockX() { return 22; }
+    function clockY() { return 43; }
+    function clockWidth() { return 346; }
+    function clockHeight() { return 108; }
 
-    function hourDigit1X() { return 48; }
-    function hourDigit2X() { return 106; }
-    function minuteDigit1X() { return 195; }
-    function minuteDigit2X() { return 253; }
-    function clockDigitY() { return 67; }
+    function digitY() { return 57; }
+    function digitWidth() { return 54; }
+    function digitHeight() { return 64; }
+    function hourDigit1X() { return 39; }
+    function hourDigit2X() { return 99; }
+    function minuteDigit1X() { return 190; }
+    function minuteDigit2X() { return 250; }
 
-    function secondDigit1X() { return 321; }
-    function secondDigit2X() { return 332; }
-    function secondDigitY() { return 74; }
+    function secondDigit1X() { return 324; }
+    function secondDigit2X() { return 337; }
+    function secondDigitY() { return 63; }
+    function secondDigitWidth() { return 11; }
+    function secondDigitHeight() { return 42; }
 
-    function gaugeTitleY() { return 157; }
-    function gaugeX() { return 37; }
+    function gaugeTitleY() { return 158; }
+    function gaugeX() { return 28; }
     function gaugeY() { return 171; }
-    function gaugeSegmentX() { return 66; }
-    function gaugeSegmentY() { return 200; }
-    function gaugePercentY() { return 235; }
+    function gaugeWidth() { return 334; }
+    function gaugeHeight() { return 73; }
+    function gaugeSegmentX() { return 59; }
+    function gaugeSegmentY() { return 202; }
+    function gaugePercentY() { return 242; }
 
-    function statsTitleY() { return 260; }
-    function statsValueY() { return 294; }
-    function statsDividerTop() { return 253; }
-    function statsDividerBottom() { return 318; }
+    function statsTitleY() { return 266; }
+    function statsValueY() { return 301; }
+    function statsDividerTop() { return 260; }
+    function statsDividerBottom() { return 323; }
+    function statsIconY() { return 284; }
 
-    function datePlateX() { return 93; }
+    function datePlateX() { return 82; }
     function datePlateY() { return 333; }
-    function dateTextY() { return 350; }
+    function datePlateWidth() { return 226; }
+    function datePlateHeight() { return 38; }
+    function dateTextY() { return 352; }
 }

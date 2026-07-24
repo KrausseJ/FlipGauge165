@@ -60,7 +60,10 @@ class Renderer {
     }
 
     function draw(dc as Dc) as Void {
-        clearAndDrawBackground(dc, _background);
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        dc.drawBitmap(0, 0, _background);
+
         drawTitle(dc);
         drawClock(dc, true);
         drawGauge(dc);
@@ -69,24 +72,21 @@ class Renderer {
     }
 
     function drawAod(dc as Dc) as Void {
-        clearAndDrawBackground(dc, _backgroundAod);
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        dc.drawBitmap(0, 0, _backgroundAod);
+
         drawClock(dc, false);
         drawStats(dc, false);
         drawDate(dc, false);
     }
 
-    private function clearAndDrawBackground(dc as Dc, bitmap) as Void {
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
-        dc.clear();
-        dc.drawBitmap(0, 0, bitmap);
-    }
-
     private function drawTitle(dc as Dc) as Void {
         var y = _layout.titleY();
         dc.setColor(0x2A2722, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(83, y, 139, y);
-        dc.drawLine(251, y, 307, y);
-        dc.drawText(_layout.screenCenterX(), y, Graphics.FONT_SMALL, "TIME",
+        dc.drawLine(74, y, 137, y);
+        dc.drawLine(253, y, 316, y);
+        dc.drawText(_layout.centerX(), y, Graphics.FONT_SMALL, "TIME",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
@@ -95,35 +95,53 @@ class Renderer {
         var hour = clockTime.hour;
         var minute = clockTime.min;
 
-        dc.drawBitmap(_layout.clockX(), _layout.clockY(), _clockChassis);
+        dc.drawScaledBitmap(
+            _layout.clockX(), _layout.clockY(),
+            _layout.clockWidth(), _layout.clockHeight(),
+            _clockChassis
+        );
 
-        drawDigit(dc, _layout.hourDigit1X(), _layout.clockDigitY(), (hour / 10).toNumber());
-        drawDigit(dc, _layout.hourDigit2X(), _layout.clockDigitY(), (hour % 10).toNumber());
-        drawDigit(dc, _layout.minuteDigit1X(), _layout.clockDigitY(), (minute / 10).toNumber());
-        drawDigit(dc, _layout.minuteDigit2X(), _layout.clockDigitY(), (minute % 10).toNumber());
+        drawDigit(dc, _layout.hourDigit1X(), (hour / 10).toNumber());
+        drawDigit(dc, _layout.hourDigit2X(), (hour % 10).toNumber());
+        drawDigit(dc, _layout.minuteDigit1X(), (minute / 10).toNumber());
+        drawDigit(dc, _layout.minuteDigit2X(), (minute % 10).toNumber());
 
         if (showSeconds) {
             var sec = clockTime.sec;
-            dc.drawBitmap(_layout.secondDigit1X(), _layout.secondDigitY(),
-                _secondDigits[(sec / 10).toNumber()]);
-            dc.drawBitmap(_layout.secondDigit2X(), _layout.secondDigitY(),
-                _secondDigits[(sec % 10).toNumber()]);
+            drawSecondDigit(dc, _layout.secondDigit1X(), (sec / 10).toNumber());
+            drawSecondDigit(dc, _layout.secondDigit2X(), (sec % 10).toNumber());
         }
     }
 
-    private function drawDigit(dc as Dc, x, y, value) as Void {
-        dc.drawBitmap(x, y, _digits[value.toNumber()]);
+    private function drawDigit(dc as Dc, x, value) as Void {
+        dc.drawScaledBitmap(
+            x, _layout.digitY(),
+            _layout.digitWidth(), _layout.digitHeight(),
+            _digits[value.toNumber()]
+        );
+    }
+
+    private function drawSecondDigit(dc as Dc, x, value) as Void {
+        dc.drawScaledBitmap(
+            x, _layout.secondDigitY(),
+            _layout.secondDigitWidth(), _layout.secondDigitHeight(),
+            _secondDigits[value.toNumber()]
+        );
     }
 
     private function drawGauge(dc as Dc) as Void {
         var titleY = _layout.gaugeTitleY();
         dc.setColor(0x2A2722, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(58, titleY, 91, titleY);
-        dc.drawLine(299, titleY, 332, titleY);
-        dc.drawText(_layout.screenCenterX(), titleY, Graphics.FONT_XTINY, "ELECTRIC QUANTITY",
+        dc.drawLine(50, titleY, 86, titleY);
+        dc.drawLine(304, titleY, 340, titleY);
+        dc.drawText(_layout.centerX(), titleY, Graphics.FONT_XTINY, "ELECTRIC QUANTITY",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
 
-        dc.drawBitmap(_layout.gaugeX(), _layout.gaugeY(), _gaugeChassis);
+        dc.drawScaledBitmap(
+            _layout.gaugeX(), _layout.gaugeY(),
+            _layout.gaugeWidth(), _layout.gaugeHeight(),
+            _gaugeChassis
+        );
 
         var battery = System.getSystemStats().battery;
         var activeSegments = (battery * 25 / 100).toNumber();
@@ -136,12 +154,12 @@ class Renderer {
 
         dc.setColor(gaugeColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < activeSegments; i += 1) {
-            dc.fillRectangle(_layout.gaugeSegmentX() + (i * 8),
-                _layout.gaugeSegmentY(), 5, 16);
+            dc.fillRectangle(_layout.gaugeSegmentX() + (i * 9),
+                _layout.gaugeSegmentY(), 6, 17);
         }
 
         dc.setColor(0x26863A, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(_layout.screenCenterX(), _layout.gaugePercentY(), Graphics.FONT_XTINY,
+        dc.drawText(_layout.centerX(), _layout.gaugePercentY(), Graphics.FONT_XTINY,
             battery.format("%d") + "%",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
@@ -182,9 +200,9 @@ class Renderer {
         dc.drawLine(254, _layout.statsDividerTop(), 254, _layout.statsDividerBottom());
 
         if (showIcons) {
-            dc.drawBitmap(46, 282, _stepIcon);
-            dc.drawBitmap(157, 282, _heartIcon);
-            dc.drawBitmap(270, 282, _calorieIcon);
+            dc.drawBitmap(46, _layout.statsIconY(), _stepIcon);
+            dc.drawBitmap(157, _layout.statsIconY(), _heartIcon);
+            dc.drawBitmap(270, _layout.statsIconY(), _calorieIcon);
         }
 
         dc.drawText(91, valueY, Graphics.FONT_SMALL, steps.format("%d"),
@@ -211,18 +229,22 @@ class Renderer {
 
     private function drawDate(dc as Dc, showPlate) as Void {
         var dateInfo = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var dateText = Lang.format("$1$  $2$  $3$", [
+        var dateText = Lang.format("NO. $1$ $2$ $3$", [
             dateInfo.day.format("%02d"),
             dateInfo.month.format("%02d"),
             dateInfo.year.format("%04d")
         ]);
 
         if (showPlate) {
-            dc.drawBitmap(_layout.datePlateX(), _layout.datePlateY(), _datePlate);
+            dc.drawScaledBitmap(
+                _layout.datePlateX(), _layout.datePlateY(),
+                _layout.datePlateWidth(), _layout.datePlateHeight(),
+                _datePlate
+            );
         }
 
         dc.setColor(showPlate ? 0x24211D : 0xD9D1C3, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(_layout.screenCenterX(), _layout.dateTextY(), Graphics.FONT_XTINY, dateText,
+        dc.drawText(_layout.centerX(), _layout.dateTextY(), Graphics.FONT_XTINY, dateText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }
