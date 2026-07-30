@@ -1,0 +1,35 @@
+<drawables>
+  <bitmap id="AssetClockBase" filename="premium/modules/clock_base.png" />
+  <bitmap id="AssetGaugeBase" filename="premium/modules/gauge_base.png" />
+  <bitmap id="AssetDateBase" filename="premium/modules/date_base.png" />
+
+  <bitmap id="AssetLabelTime" filename="premium/type/time.png" />
+  <bitmap id="AssetLabelElectric" filename="premium/type/electric.png" />
+  <bitmap id="AssetLabelStep" filename="premium/type/step.png" />
+  <bitmap id="AssetLabelHeart" filename="premium/type/heart.png" />
+  <bitmap id="AssetLabelSec" filename="premium/type/sec.png" />
+
+  <bitmap id="AssetMainDigit0" filename="premium/digits/main_0.png" />
+  <bitmap id="AssetMainDigit1" filename="premium/digits/main_1.png" />
+  <bitmap id="AssetMainDigit2" filename="premium/digits/main_2.png" />
+  <bitmap id="AssetMainDigit3" filename="premium/digits/main_3.png" />
+  <bitmap id="AssetMainDigit4" filename="premium/digits/main_4.png" />
+  <bitmap id="AssetMainDigit5" filename="premium/digits/main_5.png" />
+  <bitmap id="AssetMainDigit6" filename="premium/digits/main_6.png" />
+  <bitmap id="AssetMainDigit7" filename="premium/digits/main_7.png" />
+  <bitmap id="AssetMainDigit8" filename="premium/digits/main_8.png" />
+  <bitmap id="AssetMainDigit9" filename="premium/digits/main_9.png" />
+  <bitmap id="AssetSecDigit0" filename="premium/digits/sec_0.png" />
+  <bitmap id="AssetSecDigit1" filename="premium/digits/sec_1.png" />
+  <bitmap id="AssetSecDigit2" filename="premium/digits/sec_2.png" />
+  <bitmap id="AssetSecDigit3" filename="premium/digits/sec_3.png" />
+  <bitmap id="AssetSecDigit4" filename="premium/digits/sec_4.png" />
+  <bitmap id="AssetSecDigit5" filename="premium/digits/sec_5.png" />
+  <bitmap id="AssetSecDigit6" filename="premium/digits/sec_6.png" />
+  <bitmap id="AssetSecDigit7" filename="premium/digits/sec_7.png" />
+  <bitmap id="AssetSecDigit8" filename="premium/digits/sec_8.png" />
+  <bitmap id="AssetSecDigit9" filename="premium/digits/sec_9.png" />
+
+  <bitmap id="AssetStepIcon" filename="premium/icons/step.png" />
+  <bitmap id="AssetHeartIcon" filename="premium/icons/heart.png" />
+</drawables>

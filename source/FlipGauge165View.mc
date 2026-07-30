@@ -4,12 +4,12 @@ import Toybox.WatchUi;
 
 class FlipGauge165View extends WatchUi.WatchFace {
 
-    private var _renderer as Renderer;
+    private var _renderer as RendererPremium;
     private var _isSleeping as Boolean = false;
 
     function initialize() {
         WatchFace.initialize();
-        _renderer = new Renderer();
+        _renderer = new RendererPremium();
     }
 
     function onLayout(dc as Dc) as Void {
